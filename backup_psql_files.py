@@ -71,7 +71,7 @@ with tarfile.open(fs_zip, 'w:gz') as tar:
     tar.add('.', exclude=excludes_fn)
 
 # remove old files
-for dirpath, dirnames, filenames in os.walk(user_www):
+for dirpath, dirnames, filenames in os.walk(backup_path):
     for file in filenames:
         curpath = os.path.join(dirpath, file)
         file_modified = datetime.datetime.fromtimestamp(os.path.getmtime(curpath))
