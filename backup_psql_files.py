@@ -57,7 +57,7 @@ pg_dump = f'pg_dump --verbose -h {db_host} -F c -U {db_user} -f {backup_path}/{b
 pg_dump_run = subprocess.run(pg_dump, shell=True, stderr=subprocess.PIPE, encoding='utf-8')
 # write output pg_dump into file
 with open(logerr, 'w') as logerr_file:
-    logerr_file.writable(pg_dump_run.stderr)
+    logerr_file.write(pg_dump_run.stderr)
 print(f'{timestamp()} Backup db {db_name} complete!')
 
 print(f'{timestamp()} Backup filestorage {fs_zip} complete!')
