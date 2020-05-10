@@ -76,7 +76,6 @@ for dirpath, dirnames, filenames in os.walk(backup_path):
         curpath = os.path.join(dirpath, file)
         file_modified = datetime.datetime.fromtimestamp(os.path.getmtime(curpath))
         if datetime.datetime.now() - file_modified > datetime.timedelta(days=keep_backup_day):
-            # os.remove(curpath)
-            print(f'remove {curpath}')
-        else:
-            print('all files fresh')
+            os.remove(curpath)
+            print(f'{timestamp()} file {curpath} removed')
+
