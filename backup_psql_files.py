@@ -71,15 +71,10 @@ with tarfile.open(fs_zip, 'w:gz') as tar:
     tar.add('.', exclude=excludes_fn)
 
 # remove old files
-files = os.listdir(backup_path)
-for file in files:
-    keep_folder_days = datetime.datetime.now() - datetime.datetime.strptime(str(file), "%d-%m-%Y")
-    if keep_folder_days > keep_backup_day:
-        print('old')
-    else:
-        print('new')
-        # try:
-            # shutil.rmtree(f'{PATH_YANDEX}{YANDEX_FOLDER_BACKUPS}{file}')
-            # logging.info(f'Remove dir - {PATH_YANDEX}{YANDEX_FOLDER_BACKUPS}{file}')
-        # except Exception as e:
-            # logging.error(f'Folder not remove {file} - {repr(e)}')
+for dirpath, dirnames, filenames in os.walk(user_www):
+    for file in filenames:
+        curpath = os.path.join(dirpath, file)
+        file_modified = datetime.datetime.fromtimestamp(os.path.getmtime(curpath))
+        if datetime.datetime.now() - file_modified > datetime.timedelta(hours=4):
+            # os.remove(curpath)
+            print(f'remove {curpath}')
