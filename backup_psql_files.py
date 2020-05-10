@@ -59,7 +59,6 @@ pg_dump_run = subprocess.run(pg_dump, shell=True, stderr=subprocess.PIPE, encodi
 with open(logerr, 'w') as logerr_file:
     logerr_file.write(pg_dump_run.stderr)
 print(f'{timestamp()} Backup db {db_name} complete!')
-
 print(f'{timestamp()} Backup filestorage {fs_zip} complete!')
 
 
@@ -67,6 +66,20 @@ def excludes_fn(name):
     return exclude_dir in name
 
 
+os.chdir(user_www)
 with tarfile.open(fs_zip, 'w:gz') as tar:
-    tar.add(user_www, exclude=excludes_fn)
+    tar.add('.', exclude=excludes_fn)
 
+# remove old files
+files = os.listdir(backup_path)
+for file in files:
+    keep_folder_days = datetime.now() - datetime.strptime(str(file), "%d-%m-%Y")
+    if keep_folder_days > keep_backup_day:
+        print('old')
+    else:
+        print('new')
+        # try:
+            # shutil.rmtree(f'{PATH_YANDEX}{YANDEX_FOLDER_BACKUPS}{file}')
+            # logging.info(f'Remove dir - {PATH_YANDEX}{YANDEX_FOLDER_BACKUPS}{file}')
+        # except Exception as e:
+            # logging.error(f'Folder not remove {file} - {repr(e)}')
