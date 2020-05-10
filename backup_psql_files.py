@@ -73,7 +73,7 @@ with tarfile.open(fs_zip, 'w:gz') as tar:
 # remove old files
 files = os.listdir(backup_path)
 for file in files:
-    keep_folder_days = datetime.now() - datetime.strptime(str(file), "%d-%m-%Y")
+    keep_folder_days = datetime.datetime.now() - datetime.datetime.strptime(str(file), "%d-%m-%Y")
     if keep_folder_days > keep_backup_day:
         print('old')
     else:
