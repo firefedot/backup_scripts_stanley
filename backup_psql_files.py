@@ -54,5 +54,5 @@ if not os.path.exists(backup_path):
     print(f'{timestamp()} Create folder {backup_path} - complete')
 
 pg_dump = f'pg_dump --verbose -h {db_host} -F c -U {db_user} -f {backup_path}/{backup_file_dbname} {db_name}'
-pg_dump_run = subprocess.run(pg_dump, capture_output=True, encoding='utf-8')
-# print(pg_dump_run.stderr)
+pg_dump_run = subprocess.run(pg_dump, shell=True, stderr=subprocess.PIPE, encoding='utf-8')
+print(pg_dump_run.stderr)
