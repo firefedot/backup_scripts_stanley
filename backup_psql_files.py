@@ -1,8 +1,10 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
 import sys
 import datetime
 import os
+import subprocess
 
 if len(sys.argv) > 1:
     user_bk = sys.argv[1]
@@ -26,7 +28,7 @@ db_host = 'localhost'
 db_port = 5432
 current_date = datetime.date.today().strftime('%Y-%m-%d')
 backup_path = f'{home_path}/yandex/backup/{user_bk}'
-BACKUP_FILE_DBNAME=f'{db_name}-{current_date}.backup'
+backup_file_dbname=f'{db_name}-{current_date}.backup'
 
 
 home_user = f'/home/{user_bk}'
@@ -48,3 +50,14 @@ if not os.path.exists(backup_path):
     os.makedirs(backup_path)
     print(f'{timestamp()} Create folder {backup_path} - complete')
 
+pg_dump = f'pg_dump --verbose -h {db_host} -F c -U {db_user} -f {backup_path}/{backup_file_dbname} {db_name}'
+pg_dump_run = subprocess.run(pg_dump, shell=True, stdout=subprocess.PIPE, encoding='utf-8')
+
+# with gzip.open(‘backup.gz’, ‘wb’) as f:
+#     popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+#
+#     for stdout_line in iter(popen.stdout.readline, “”):
+#         f.write(stdout_line.encode(‘utf - 8’))
+#
+#         popen.stdout.close()
+#         popen.wait()
