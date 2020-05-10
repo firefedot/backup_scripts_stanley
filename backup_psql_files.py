@@ -42,7 +42,7 @@ keep_backup_day = 10
 keep_backup_yesterday = 1
 fs_zip = f'{backup_path}/files-{current_date}.tar.gz'
 
-log_dir = f'{home_user}/_log'
+log_dir = f'{home_path}/_log'
 log = f'{log_dir}/{script_name}.log'
 logerr = f'{log_dir}/{script_name}_error.log'
 
