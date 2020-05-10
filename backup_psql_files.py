@@ -38,7 +38,7 @@ user_www = f'{home_user}/www'
 exclude_dir = "site/media/CACHE"
 
 
-keep_backup_day = 10
+keep_backup_day = 3
 keep_backup_yesterday = 1
 fs_zip = f'{backup_path}/files-{current_date}.tar.gz'
 
@@ -75,6 +75,8 @@ for dirpath, dirnames, filenames in os.walk(user_www):
     for file in filenames:
         curpath = os.path.join(dirpath, file)
         file_modified = datetime.datetime.fromtimestamp(os.path.getmtime(curpath))
-        if datetime.datetime.now() - file_modified > datetime.timedelta(hours=4):
+        if datetime.datetime.now() - file_modified > datetime.timedelta(days=keep_backup_day):
             # os.remove(curpath)
             print(f'remove {curpath}')
+        else:
+            print('all files fresh')
