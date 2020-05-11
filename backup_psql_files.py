@@ -10,7 +10,7 @@ import smtplib
 # this import config file
 from config import *
 
-
+# checking less args
 if len(sys.argv) > 1:
     user_bk = sys.argv[1]
     if user_bk == 'srisovki':
@@ -20,6 +20,27 @@ if len(sys.argv) > 1:
     db_user = f'{user_bk}us'
 else:
     sys.exit("Error: less argv, you mast write argv username")
+
+# define vars
+script_name = os.path.basename(__file__).split('.')[0]
+home_path = '/home/stanley'
+db_host = 'localhost'
+db_port = 5432
+current_date = datetime.date.today().strftime('%Y-%m-%d')
+backup_path = f'{home_path}/yandex/backup/{user_bk}'
+backup_file_dbname = f'{db_name}-{current_date}.backup'
+
+home_user = f'/home/{user_bk}'
+user_www = f'{home_user}/www'
+exclude_dir = "site/media/CACHE"
+
+keep_backup_day = 3
+keep_backup_yesterday = 1
+fs_zip = f'{backup_path}/files-{current_date}.tar.gz'
+
+log_dir = f'{home_path}/_log'
+log = f'{log_dir}/{script_name}.log'
+logerr = f'{log_dir}/{script_name}_error.log'
 
 
 # function timestamp
@@ -35,32 +56,11 @@ def send_email(email_text):
     server.login(smtp_login, smtp_passwd)
     server.sendmail(smtp_fromaddr, smtp_toaddr, email_text)
     server.quit()
+    print(f'{timestamp()} Send mail compete')
 
 
+# Backup databases
 print(f'{timestamp()} Begin backup process for {user_bk} , db_name: {db_name}, db_user: {db_user}, {datetime.datetime.now()} ')
-
-script_name = os.path.basename(__file__).split('.')[0]
-home_path = '/home/stanley'
-db_host = 'localhost'
-db_port = 5432
-current_date = datetime.date.today().strftime('%Y-%m-%d')
-backup_path = f'{home_path}/yandex/backup/{user_bk}'
-backup_file_dbname = f'{db_name}-{current_date}.backup'
-
-
-home_user = f'/home/{user_bk}'
-user_www = f'{home_user}/www'
-exclude_dir = "site/media/CACHE"
-
-
-keep_backup_day = 3
-keep_backup_yesterday = 1
-fs_zip = f'{backup_path}/files-{current_date}.tar.gz'
-
-log_dir = f'{home_path}/_log'
-log = f'{log_dir}/{script_name}.log'
-logerr = f'{log_dir}/{script_name}_error.log'
-
 print(f'{timestamp()} Backup Database: {db_name}, userdb: {db_user}')
 print(f'{timestamp()} Create {backup_path}')
 
@@ -94,10 +94,7 @@ for dirpath, dirnames, filenames in os.walk(backup_path):
             os.remove(curpath)
             print(f'{timestamp()} file {curpath} removed')
 
-# send email
-print('Send email')
-
-
-
+# send email if script success complete
+print(f'{timestamp()} Send email')
 
 send_email(smtp_msg)
