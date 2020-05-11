@@ -6,6 +6,10 @@ import datetime
 import os
 import subprocess
 import tarfile
+import smtplib
+# this import config file
+from config import *
+
 
 if len(sys.argv) > 1:
     user_bk = sys.argv[1]
@@ -78,4 +82,12 @@ for dirpath, dirnames, filenames in os.walk(backup_path):
         if datetime.datetime.now() - file_modified > datetime.timedelta(days=keep_backup_day):
             os.remove(curpath)
             print(f'{timestamp()} file {curpath} removed')
+
+# send email
+
+server = smtplib.SMTP(smtp_server, smtp_port)
+server.ehlo()
+server.starttls()
+server.sendmail(smtp_fromaddr, smtp_toaddr, smtp_msg)
+server.quit()
 
