@@ -22,8 +22,19 @@ else:
     sys.exit("Error: less argv, you mast write argv username")
 
 
+# function timestamp
 def timestamp():
     return datetime.datetime.now()
+
+
+# function send email
+def send_email(email_text):
+    server = smtplib.SMTP(smtp_server, smtp_port)
+    server.ehlo()
+    server.starttls()
+    server.login(smtp_login, smtp_passwd)
+    server.sendmail(smtp_fromaddr, smtp_toaddr, email_text)
+    server.quit()
 
 
 print(f'{timestamp()} Begin backup process for {user_bk} , db_name: {db_name}, db_user: {db_user}, {datetime.datetime.now()} ')
@@ -84,11 +95,9 @@ for dirpath, dirnames, filenames in os.walk(backup_path):
             print(f'{timestamp()} file {curpath} removed')
 
 # send email
+print('Send email')
 
-server = smtplib.SMTP(smtp_server, smtp_port)
-server.ehlo()
-server.starttls()
-server.login(smtp_login, smtp_passwd)
-server.sendmail(smtp_fromaddr, smtp_toaddr, smtp_msg)
-server.quit()
 
+
+
+send_email(smtp_msg)
