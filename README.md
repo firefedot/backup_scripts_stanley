@@ -72,3 +72,11 @@ https://yandex.ru/support/disk-desktop-linux/
 
 Все действия логируются в фвйл USER_BK_backup_psql.log
 В файл USER_BK_backup_psql_error.log - пишутся логи pg_dump - особенность pg_dump
+
+
+#### Возможные проблемы
+
+на версии Python3.7 может не работать exсlude у модуля tarfile
+https://github.com/PipelineAI/pipeline/issues/294
+
+На версии < 3.6.9 работает
