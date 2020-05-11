@@ -77,6 +77,8 @@ print(f'{timestamp()} Backup db {db_name} complete!')
 print(f'{timestamp()} Backup filestorage {fs_zip} complete!')
 
 
+# archive filestorage to tar.gz
+# exclude dir
 def excludes_fn(name):
     return exclude_dir in name
 
