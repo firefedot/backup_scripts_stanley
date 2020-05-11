@@ -88,6 +88,7 @@ for dirpath, dirnames, filenames in os.walk(backup_path):
 server = smtplib.SMTP(smtp_server, smtp_port)
 server.ehlo()
 server.starttls()
+server.login(smtp_login, smtp_passwd)
 server.sendmail(smtp_fromaddr, smtp_toaddr, smtp_msg)
 server.quit()
 
