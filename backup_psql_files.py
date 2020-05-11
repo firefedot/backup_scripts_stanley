@@ -10,6 +10,12 @@ import smtplib
 # this import config file
 from config import *
 
+
+# function timestamp
+def timestamp():
+    return datetime.datetime.now()
+
+
 # checking less args
 if len(sys.argv) > 1:
     user_bk = sys.argv[1]
@@ -19,7 +25,7 @@ if len(sys.argv) > 1:
         db_name = f'{user_bk}db'
     db_user = f'{user_bk}us'
 else:
-    sys.exit("Error: less argv, you mast write argv username")
+    sys.exit(f"{timestamp()} Error: less argv, you mast write argv username")
 
 # define vars
 script_name = os.path.basename(__file__).split('.')[0]
@@ -42,10 +48,10 @@ log_dir = f'{home_path}/_log'
 log = f'{log_dir}/{script_name}.log'
 logerr = f'{log_dir}/{script_name}_error.log'
 
-
-# function timestamp
-def timestamp():
-    return datetime.datetime.now()
+# create logging dir
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+    print(f'{timestamp()} Create logging dir {log_dir} - complete')
 
 
 # function send email
