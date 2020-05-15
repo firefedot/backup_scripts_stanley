@@ -31,7 +31,7 @@ example config.py:
      "Subject: Backup is failed",
      "",
      str('YandexDisk is not mounted!')
-])
+    ])
     
 - smtp_server  - адрес smtp сервера
 - smtp_port - порт smtp сервера
