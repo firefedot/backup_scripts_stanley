@@ -53,6 +53,7 @@ backup_file_dbname = f'{db_name}-{current_date}.backup'
 if not os.path.exists(backup_path):
     print(f'{timestamp()} Send email - failed backup')
     send_email(smtp_msg_error)
+    sys.exit(f"{timestamp()} Error: {backup_path} is absent")
 
 
 home_user = f'/home/{user_bk}'
