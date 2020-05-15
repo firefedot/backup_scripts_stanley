@@ -27,32 +27,6 @@ if len(sys.argv) > 1:
 else:
     sys.exit(f"{timestamp()} Error: less argv, you mast write argv username")
 
-# define vars
-script_name = os.path.basename(__file__).split('.')[0]
-home_path = '/home/stanley'
-db_host = 'localhost'
-db_port = 5432
-current_date = datetime.date.today().strftime('%Y-%m-%d')
-backup_path = f'{home_path}/yandex/backup/{user_bk}'
-backup_file_dbname = f'{db_name}-{current_date}.backup'
-
-home_user = f'/home/{user_bk}'
-user_www = f'{home_user}/www'
-exclude_dir = ["./site/media/CACHE", f"./venv_{user_bk}", "./.git", "./.gitignore"]
-
-keep_backup_day = 3
-keep_backup_yesterday = 1
-fs_zip = f'{backup_path}/files-{current_date}.tar.gz'
-
-log_dir = f'{home_path}/_log'
-log = f'{log_dir}/{script_name}.log'
-logerr = f'{log_dir}/{script_name}_error.log'
-
-# create logging dir
-if not os.path.exists(log_dir):
-    os.makedirs(log_dir)
-    print(f'{timestamp()} Create logging dir {log_dir} - complete')
-
 
 # function send email
 def send_email(email_text):
@@ -65,16 +39,50 @@ def send_email(email_text):
     print(f'{timestamp()} Send mail compete')
 
 
+# define vars
+script_name = os.path.basename(__file__).split('.')[0]
+home_path = '/home/stanley'
+db_host = 'localhost'
+db_port = 5432
+current_date = datetime.date.today().strftime('%Y-%m-%d')
+backup_path = f'{home_path}/yandex/backup'
+backup_path_user = f'{home_path}/yandex/backup/{user_bk}'
+backup_file_dbname = f'{db_name}-{current_date}.backup'
+
+
+if not os.path.exists(backup_path):
+    print(f'{timestamp()} Send email - failed backup')
+    send_email(smtp_msg_error)
+
+
+home_user = f'/home/{user_bk}'
+user_www = f'{home_user}/www'
+exclude_dir = ["./site/media/CACHE", f"./venv_{user_bk}", "./.git", "./.gitignore"]
+
+keep_backup_day = 3
+keep_backup_yesterday = 1
+fs_zip = f'{backup_path_user}/files-{current_date}.tar.gz'
+
+log_dir = f'{home_path}/_log'
+log = f'{log_dir}/{script_name}.log'
+logerr = f'{log_dir}/{script_name}_error.log'
+
+# create logging dir
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+    print(f'{timestamp()} Create logging dir {log_dir} - complete')
+
+
 # Backup databases
 print(f'{timestamp()} Begin backup process for {user_bk} , db_name: {db_name}, db_user: {db_user}, {datetime.datetime.now()} ')
 print(f'{timestamp()} Backup Database: {db_name}, userdb: {db_user}')
 print(f'{timestamp()} Create {backup_path}')
 
-if not os.path.exists(backup_path):
-    os.makedirs(backup_path)
-    print(f'{timestamp()} Create folder {backup_path} - complete')
+if not os.path.exists(backup_path_user):
+    os.makedirs(backup_path_user)
+    print(f'{timestamp()} Create folder {backup_path_user} - complete')
 
-pg_dump = f'pg_dump --verbose -h {db_host} -F c -U {db_user} -f {backup_path}/{backup_file_dbname} {db_name}'
+pg_dump = f'pg_dump --verbose -h {db_host} -F c -U {db_user} -f {backup_path_user}/{backup_file_dbname} {db_name}'
 pg_dump_run = subprocess.run(pg_dump, shell=True, stderr=subprocess.PIPE, encoding='utf-8')
 # write output pg_dump into file
 with open(logerr, 'w') as logerr_file:
@@ -98,7 +106,7 @@ with tarfile.open(fs_zip, 'w:gz') as tar:
     tar.add('.', exclude=excludes_fn)
 
 # remove old files
-for dirpath, dirnames, filenames in os.walk(backup_path):
+for dirpath, dirnames, filenames in os.walk(backup_path_user):
     for file in filenames:
         curpath = os.path.join(dirpath, file)
         file_modified = datetime.datetime.fromtimestamp(os.path.getmtime(curpath))
