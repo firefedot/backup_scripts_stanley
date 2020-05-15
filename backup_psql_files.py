@@ -38,7 +38,7 @@ backup_file_dbname = f'{db_name}-{current_date}.backup'
 
 home_user = f'/home/{user_bk}'
 user_www = f'{home_user}/www'
-exclude_dir = "site/media/CACHE"
+exclude_dir = ["./site/media/CACHE", f"./venv_{user_bk}", "./.git", "./.gitignore"]
 
 keep_backup_day = 3
 keep_backup_yesterday = 1
@@ -86,7 +86,11 @@ print(f'{timestamp()} Backup filestorage {fs_zip} complete!')
 # archive filestorage to tar.gz
 # exclude dir
 def excludes_fn(name):
-    return exclude_dir in name
+    if name in exclude_dir:
+        print(f'Exclude: {name}')
+        return True
+    else:
+        return False
 
 
 os.chdir(user_www)
