@@ -25,6 +25,14 @@ example config.py:
          str('Every day backup completed is successfuly')
     ])
     
+    smtp_msg_error = "\r\n".join([
+     f"From: {smtp_fromaddr}",
+     f"To: {', '.join(map(str,smtp_toaddr))}",
+     "Subject: Backup is failed",
+     "",
+     str('YandexDisk is not mounted!')
+])
+    
 - smtp_server  - адрес smtp сервера
 - smtp_port - порт smtp сервера
 - smtp_login - логин для почты
